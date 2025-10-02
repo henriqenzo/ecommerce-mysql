@@ -129,8 +129,8 @@ insert into Produto (categoria_id, nome, descricao, imagem_url, preco, tamanho, 
 insert into ItemPedido (pedido_id, produto_id, quantidade) values 
 (1, 1, 1),
 (2, 1, 1),
-(2, 2, 1),
-(3, 2, 3);
+(2, 2, 1),
+(3, 2, 3);
 
 /* ----- Consultas ----- */
 
