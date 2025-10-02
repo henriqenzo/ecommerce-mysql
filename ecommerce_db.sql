@@ -131,3 +131,35 @@ insert into ItemPedido (pedido_id, produto_id, quantidade) values
 (2, 1, 1),
 (2, 2, 1),
 (3, 2, 3);
+
+/* ----- Consultas ----- */
+
+-- Retornar o nome dos clientes e o CEP de seus endereços
+select C.pnome, C.sobrenome, E.cep from Cliente C 
+left join Endereco E on C.id = E.cliente_id;
+
+-- Retornar o nome dos clientes que já fizeram algum pedido e a quantidade de pedidos de cada um em ordem decrescente
+select C.pnome, C.sobrenome, count(P.id) as qtd_pedidos from Cliente C 
+join Pedido P on C.id = P.cliente_id
+group by C.id
+order by qtd_pedidos desc;
+
+-- Retornar pedidos que ainda não tem pagamento registrado
+select Pe.id, Pe.cliente_id, Pe.endereco_id, Pe.data_pedido, Pe.valor_total, Pe.status_pedido from Pedido Pe
+left join Pagamento Pa on Pe.id = Pa.pedido_id
+where Pa.id is null;
+
+-- Retornar o nome do cliente, id dos pedidos dele, nome e preço dos produtos de cada pedido
+select C.pnome as cliente_nome, Pe.id as id_pedido, Pr.nome as produto_nome, Pr.preco from Cliente C
+join Pedido Pe on C.id = Pe.cliente_id
+join ItemPedido I on Pe.id = I.pedido_id
+join Produto Pr on I.produto_id = Pr.id
+order by Pe.id;
+
+/* ----- Atualização dos dados ----- */
+
+-- Atualizando status de pedidos que têm registro de pagamento com status Aprovado
+update Pedido Pe
+left join Pagamento Pa on Pe.id = Pa.pedido_id
+set Pe.status_pedido = 'Enviado'
+where Pa.id is not null and Pa.status_pagamento = 'Aprovado';
